@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
 
-    private LayerMask encounterSpace;
+    private LayerMask encounterSpace, trainerBattle;
 
     [Tooltip("The radius of the overlap sphere")]
 
@@ -188,14 +188,29 @@ public class PlayerController : MonoBehaviour
 
             if (UnityEngine.Random.Range(1, 101) <= 10)
             {
+               
                 if (debugMode)
                 {
                     Debug.Log("Triggered a battle! ");
+                    //OnEncountered();
                 }
+
+                OnEncountered();
             }
 
         }
 
+    }
+
+
+    private void CheckIfInTrainersView()
+    {
+      //  var collider = Physics.OverlapSphere(transform.position, sphereRadius, GameLayers.i.FovLayer);
+        if (Physics.OverlapSphere(transform.position, sphereRadius, trainerBattle) != null)
+        {
+            //character.Animator.IsMoving = false;
+           // OnEnterTrainersView?.Invoke(collider[]);
+        }
     }
 
     private void OnDrawGizmos()

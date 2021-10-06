@@ -5,25 +5,46 @@ using UnityEngine.UI;
 using TMPro;
 public class BattleDialogBox : MonoBehaviour
 {
-    [SerializeField] int lettersPerSecond;
-    [SerializeField] Color highlightedColor;
+    [Tooltip("The amount of letters that appear per second")]
+    [SerializeField] 
+    int lettersPerSecond = 30;
+    [SerializeField] 
+    Color highlightedColor;
     
-    [SerializeField] TMP_Text dialogText;
-    [SerializeField] GameObject actionSelector;
-    [SerializeField] GameObject moveSelector;
-    [SerializeField] GameObject moveDetails;
+    [Tooltip("The text in the dialogue box ")]
+    [SerializeField] 
+    TMP_Text dialogText;
+    [Tooltip("The action selector")]
+    [SerializeField]
+    GameObject actionSelector;
+    [Tooltip("The move selector")]
+    [SerializeField]
+    GameObject moveSelector;
+    [Tooltip("The move details")]
+    [SerializeField]
+    GameObject moveDetails;
     
-    [SerializeField] List<Text> actionTexts;
-    [SerializeField] List<Text> moveTexts;
-    
-    [SerializeField] Text ppText;
-    [SerializeField] Text typeText;
+
+    [Tooltip("A list of texts from the action selector")]
+    [SerializeField]
+    List<TMP_Text> actionTexts;
+    [Tooltip("A list of texts from the move screen")]
+    [SerializeField]
+    List<TMP_Text> moveTexts;
+    [Tooltip("The power left in a move  ")]
+    [SerializeField] 
+    TMP_Text ppText;
+    [Tooltip("The text for the type ")]
+    [SerializeField] 
+    TMP_Text typeText;
 
     public void SetDialog(string dialog)
     {
         dialogText.text = dialog;
     }
 
+
+    //setting up the text 
     public IEnumerator TypeDialog(string dialog)
     {
         dialogText.text = "";
@@ -35,7 +56,7 @@ public class BattleDialogBox : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
     }
-
+    //enabling the dialog text 
     public void EnableDialogText(bool enabled)
     {
         dialogText.enabled = enabled;
