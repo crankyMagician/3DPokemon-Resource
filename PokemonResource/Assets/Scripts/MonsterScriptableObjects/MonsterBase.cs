@@ -9,20 +9,33 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Monster", menuName = "Monster/Create new Monster")]
 public class MonsterBase : ScriptableObject
 {
+    [Tooltip("The name of the monster")]
     [SerializeField] string monsterName;
 
+
+    [Tooltip("A description of the monster")]
     [TextArea]
     [SerializeField] string description;
 
 
-
+    [Space(2)]
     [SerializeField] Sprite frontSprite;
     [SerializeField] Sprite backSprite;
 
+    [Space(2)]
+    [Tooltip("The type of the monster")]
     [SerializeField] MonsterType type1;
+
+    [Tooltip("The secondary type of the monster")]
     [SerializeField] MonsterType type2;
 
+    [Space(2)]
+    [Tooltip("A list of move the monster learns naturally")]
     [SerializeField] List<LearnableMove> learnableMoves;
+
+    [Space(2)]
+    [Header("Monster Stats")]
+   
 
     // Base Stats
     [SerializeField] int maxHp;
@@ -34,7 +47,7 @@ public class MonsterBase : ScriptableObject
 
     public string Name
     {
-        get { return name; }
+        get { return monsterName; }
     }
 
     public string Description

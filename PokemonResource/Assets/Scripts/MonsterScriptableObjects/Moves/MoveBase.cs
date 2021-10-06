@@ -6,7 +6,7 @@ using UnityEngine;
 public class MoveBase : ScriptableObject
 {
     [Tooltip("The name of the move")]
-    [SerializeField]private string monsterName;
+    [SerializeField]private string moveName;
 
 
     [Tooltip("Create a short description of the move")]
@@ -36,8 +36,10 @@ public class MoveBase : ScriptableObject
     [Tooltip("Does this move affect the monster or the opponent? ")]
     [SerializeField] MoveTarget target;
 
+
+    //getters 
     public string Name {
-        get { return name; }
+        get { return moveName; }
     }
 
     public string Description {
@@ -85,6 +87,8 @@ public class MoveBase : ScriptableObject
     }
 }
 
+
+//the effects of the move 
 [System.Serializable]
 public class MoveEffects
 {
@@ -95,7 +99,7 @@ public class MoveEffects
     [Tooltip("The type of condition the attack causes for the player")]
     [SerializeField] ConditionID volatileStatus;
 
-    
+    //getters 
     public List<StatBoost> Boosts {
         get { return boosts; }
     }
@@ -110,6 +114,8 @@ public class MoveEffects
 }
 
 [System.Serializable]
+
+//any secondary effects 
 public class SecondaryEffects : MoveEffects
 {
     [SerializeField] int chance;

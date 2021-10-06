@@ -4,11 +4,15 @@ using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
-public class Monster : MonoBehaviour
+public class Monster //: MonoBehaviour
 {
+    //returning the mosnter base
     [SerializeField] MonsterBase _base;
+    //the level of the pokemon
     [SerializeField] int level;
 
+
+    //getting the getters
     public MonsterBase Base
     {
         get

@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
 
-    private LayerMask solidObjects, encounterSpace;
+    private LayerMask encounterSpace;
 
     [Tooltip("The radius of the overlap sphere")]
 
@@ -102,17 +102,21 @@ public class PlayerController : MonoBehaviour
 
         if(direction.magnitude >= 0.1f)
         {
-            float targetAngle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg * camTransform.eulerAngles.y;
+            float targetAngle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg + camTransform.eulerAngles.y;
 
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+           
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            characterController.Move(moveSpeed * Time.deltaTime * moveDirection.normalized);
+            //characterController.Move(direction * moveSpeed * Time.deltaTime);
+             characterController.Move(moveSpeed * Time.deltaTime * moveDirection.normalized);
         }
-
+       // CheckForEncounters();
     }
+
+    /*
     //is the player colliding with solid objects?
     private bool IsWalkAble(Vector3 targetPos)
     {
@@ -143,12 +147,29 @@ public class PlayerController : MonoBehaviour
 
         CheckForEncounters();
     }
+    */
+    private void OnTriggerStay(Collider other)
+    {
+       // Debug.Log("Triggered a battle! ");
+        if (other.gameObject.CompareTag("EncounterSpace"))
+        {
 
+            if (UnityEngine.Random.Range(1, 101) <= 10)
+            {
+                if (debugMode)
+                {
+                    Debug.Log("Triggered a battle! ");
+                }
+            }
+        }
+    }
+
+   
     //is the player touching grass? Check for battles 
     private void CheckForEncounters()
     {
 
-        if (Physics.OverlapSphere(transform.position, sphereRadius, encounterSpace) != null)
+        if (Physics.OverlapSphere(transform.position, sphereRadius, encounterSpace)  != null)
         {
 
             if (UnityEngine.Random.Range(1, 101) <= 10)
@@ -162,4 +183,11 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, sphereRadius);
+    }
 }
+
