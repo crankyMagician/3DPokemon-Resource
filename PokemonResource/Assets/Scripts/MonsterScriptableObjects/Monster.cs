@@ -7,7 +7,7 @@ using UnityEngine;
 public class Monster //: MonoBehaviour
 {
     //returning the mosnter base
-    [SerializeField] MonsterBase _base;
+    MonsterBase _base;
     //the level of the pokemon
     [SerializeField] int level;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+
+
+
+
     [Tooltip("Turn this on to debug in the inspector")]
     public bool debugMode;
 
 
+    public event Action OnEncountered;
+
+    public event Action<Collider> OnEnterTrainersView;
 
     [Space(2)]
 
@@ -94,28 +103,33 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
 
+       // CheckForEncounters();
+    }
+
+
+    public void HandleUpdate()
+    {
+
         float horizontal = Input.GetAxisRaw("Horizontal");
 
         float vertical = Input.GetAxisRaw("Vertical");
 
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
-        if(direction.magnitude >= 0.1f)
+        if (direction.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg + camTransform.eulerAngles.y;
 
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-           
+
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             //characterController.Move(direction * moveSpeed * Time.deltaTime);
-             characterController.Move(moveSpeed * Time.deltaTime * moveDirection.normalized);
+            characterController.Move(moveSpeed * Time.deltaTime * moveDirection.normalized);
         }
-       // CheckForEncounters();
     }
-
     /*
     //is the player colliding with solid objects?
     private bool IsWalkAble(Vector3 targetPos)
