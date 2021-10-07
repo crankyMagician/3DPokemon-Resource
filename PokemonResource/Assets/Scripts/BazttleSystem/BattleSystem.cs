@@ -46,18 +46,31 @@ public class BattleSystem : MonoBehaviour
 
         ActionSelection();
     }
+    //If you run from battle Run Turn as run else the battle is over and the battle was not won 
     void RunningFromBattle()
     {
+
+       
         if (UnityEngine.Random.Range(1, 101) <= 10)
         {
-            StartCoroutine(RunTurns(BattleAction.Move));
+            // StartCoroutine(RunTurns(BattleAction.Move));
+
+            // var selectedPokemon = playerParty.Monsters[currentMember];
+            //state = BattleAction.Run;
+           // Debug.Log("Failed to run from battle");
+            StartCoroutine(RunTurns(BattleAction.Run));
+
+            //   yield return SwitchPokemon(selectedPokemon);
+
         }
+        
         else
         {
             state = BattleState.BattleOver;
             OnBattleOver(false);
             Debug.Log("Ran from battle");
         }
+        
     }
     void BattleOver(bool won)
     {
@@ -91,15 +104,10 @@ public class BattleSystem : MonoBehaviour
     IEnumerator RunTurns(BattleAction playerAction)
     {
         state = BattleState.RunningTurn;
-        /*
-        if (playerAction == BattleAction.Run)
-        {
-           // playerUnit.Monster.CurrentMove = playerUnit.Monster.Moves[null];
-            enemyUnit.Monster.CurrentMove = enemyUnit.Monster.GetRandomMove();
+        
+       
 
-        }
-
-        */
+        
         if (playerAction == BattleAction.Move)
         {
             playerUnit.Monster.CurrentMove = playerUnit.Monster.Moves[currentMove];
@@ -142,6 +150,13 @@ public class BattleSystem : MonoBehaviour
                 yield return SwitchPokemon(selectedPokemon);
             }
 
+            if(playerAction == BattleAction.Run)
+            {
+                Debug.Log("Failed turn taking place");
+                state = BattleState.Busy;
+                yield return FailedToRunFromBattle();
+              //  FailedRunFromBattle(enemyUnit, playerUnit, enemyMove);
+            }
             // Enemy Turn
             var enemyMove = enemyUnit.Monster.GetRandomMove();
             yield return RunMove(enemyUnit, playerUnit, enemyMove);
@@ -152,9 +167,14 @@ public class BattleSystem : MonoBehaviour
         if (state != BattleState.BattleOver)
             ActionSelection();
     }
-
+   
     IEnumerator RunMove(BattleUnit sourceUnit, BattleUnit targetUnit, Move move)
     {
+       
+        
+        ////////
+        /////
+        //
         bool canRunMove = sourceUnit.Monster.OnBeforeMove();
         if (!canRunMove)
         {
@@ -454,7 +474,12 @@ public class BattleSystem : MonoBehaviour
             ActionSelection();
         }
     }
+    IEnumerator FailedToRunFromBattle()
+    {
+        yield return dialogBox.TypeDialog($"You failed to run from battle!");
 
+        state = BattleState.RunningTurn;
+    }
     IEnumerator SwitchPokemon(Monster newPokemon)
     {
         if (playerUnit.Monster.HP > 0)
