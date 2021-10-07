@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e41593dd6d55654ba7c00523961da9c, type: 3}
   m_Name: Tackle
   m_EditorClassIdentifier: 
-  monsterName: 
-  description: 
+  moveName: Tackle
+  description: A physical tackle
   type: 1
   power: 5
   accuracy: 65

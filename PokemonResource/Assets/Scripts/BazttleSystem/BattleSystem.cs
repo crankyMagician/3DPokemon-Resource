@@ -46,7 +46,19 @@ public class BattleSystem : MonoBehaviour
 
         ActionSelection();
     }
-
+    void RunningFromBattle()
+    {
+        if (UnityEngine.Random.Range(1, 101) <= 10)
+        {
+            StartCoroutine(RunTurns(BattleAction.Move));
+        }
+        else
+        {
+            state = BattleState.BattleOver;
+            OnBattleOver(false);
+            Debug.Log("Ran from battle");
+        }
+    }
     void BattleOver(bool won)
     {
         state = BattleState.BattleOver;
@@ -79,7 +91,15 @@ public class BattleSystem : MonoBehaviour
     IEnumerator RunTurns(BattleAction playerAction)
     {
         state = BattleState.RunningTurn;
+        /*
+        if (playerAction == BattleAction.Run)
+        {
+           // playerUnit.Monster.CurrentMove = playerUnit.Monster.Moves[null];
+            enemyUnit.Monster.CurrentMove = enemyUnit.Monster.GetRandomMove();
 
+        }
+
+        */
         if (playerAction == BattleAction.Move)
         {
             playerUnit.Monster.CurrentMove = playerUnit.Monster.Moves[currentMove];
@@ -349,6 +369,7 @@ public class BattleSystem : MonoBehaviour
             else if (currentAction == 3)
             {
                 // Run
+                RunningFromBattle();
             }
         }
     }

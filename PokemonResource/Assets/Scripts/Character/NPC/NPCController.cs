@@ -4,9 +4,23 @@ using UnityEngine;
 
 public class NPCController : MonoBehaviour, Interactable
 {
-    [SerializeField] Dialog dialog;
-    [SerializeField] List<Vector2> movementPattern;
-    [SerializeField] float timeBetweenPattern;
+    [Space(2)]
+    [Header("NPC Traits")]
+    [Tooltip("The dialogue the npc has")]
+    [SerializeField]
+    Dialog dialog;
+    [Tooltip("The transforms the npc moves to ")]
+    [SerializeField] 
+    List<Transform> movementPattern;
+
+    [Tooltip("The time between moving to the transforms ")]
+    [SerializeField] 
+    float timeBetweenPattern;
+
+    [Space(2)]
+    [Header("Debug")]
+    [SerializeField]
+    private Vector3 cubeRadius;
 
     NPCState state;
     float idleTimer = 0f;
@@ -54,12 +68,23 @@ public class NPCController : MonoBehaviour, Interactable
 
         var oldPos = transform.position;
 
-        yield return character.Move(movementPattern[currentPattern]);
+        yield return character.Move(movementPattern[currentPattern].position);
 
         if (transform.position != oldPos)
             currentPattern = (currentPattern + 1) % movementPattern.Count;
 
         state = NPCState.Idle;
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        foreach (Transform item in movementPattern)
+        {
+            Gizmos.DrawWireCube(transform.position, cubeRadius);
+        }
+       
     }
 }
 
