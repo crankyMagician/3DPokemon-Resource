@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class PartyScreen : MonoBehaviour
 {
-    [SerializeField] Text messageText;
+    [SerializeField] TMP_Text messageText;
 
     PartyMemberUI[] memberSlots;
     List<Monster> monsters;

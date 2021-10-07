@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30b01219c74be0442bf906b9f71bdec7, type: 3}
   m_Name: Squirtle
   m_EditorClassIdentifier: 
-  name: Squirtle
+  monsterName: 
   description: 
   frontSprite: {fileID: 21300000, guid: 818cf159951cf9a4e8e810b2bbab4096, type: 3}
   backSprite: {fileID: 21300000, guid: 18fc6e8e3f72b154fba88f358748be28, type: 3}
@@ -20,7 +20,7 @@ MonoBehaviour:
   type2: 1
   learnableMoves:
   - moveBase: {fileID: 11400000, guid: e8d9f7fdd439b5d4bb323e8d58259624, type: 2}
-    level: 0
+    level: 1
   maxHp: 10
   attack: 15
   defense: 10

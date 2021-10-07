@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
+//using UnityEngine.UI;
+using TMPro;
 public class DialogManager : MonoBehaviour
 {
     [SerializeField] GameObject dialogBox;
-    [SerializeField] Text dialogText;
+    [SerializeField] TMP_Text dialogText;
     [SerializeField] int lettersPerSecond;
 
     public event Action OnShowDialog;

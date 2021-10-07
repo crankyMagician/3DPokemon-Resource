@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class PartyMemberUI : MonoBehaviour
 {
-    [SerializeField] Text nameText;
-    [SerializeField] Text levelText;
+    [SerializeField] TMP_Text nameText;
+    [SerializeField] TMP_Text levelText;
     [SerializeField] HPBar hpBar;
 
     [SerializeField] Color highlightedColor;

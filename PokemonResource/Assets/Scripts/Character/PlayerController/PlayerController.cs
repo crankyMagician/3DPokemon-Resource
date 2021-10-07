@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
+
+
 
 
 [RequireComponent(typeof(CharacterController))]
@@ -11,13 +14,18 @@ public class PlayerController : MonoBehaviour
 {
 
 
-
+    
 
 
     [Tooltip("Turn this on to debug in the inspector")]
     public bool debugMode;
 
 
+    [Tooltip("The player's monster party")]
+    public MonsterParty playerParty;
+
+    //[Tooltip("The event that takes place when the player has an encounter")]
+   // public Event encounterEvent;
     public event Action OnEncountered;
 
     public event Action<Collider> OnEnterTrainersView;
@@ -73,6 +81,8 @@ public class PlayerController : MonoBehaviour
     [Space(2)]
 
     [Header("Componenets")]
+
+
     /*
     [Tooltip("This is the player's physics")]
     [SerializeField]
@@ -102,7 +112,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-
+        HandleUpdate();
        // CheckForEncounters();
     }
 
@@ -167,13 +177,16 @@ public class PlayerController : MonoBehaviour
        // Debug.Log("Triggered a battle! ");
         if (other.gameObject.CompareTag("EncounterSpace"))
         {
+            OnEncountered();
 
             if (UnityEngine.Random.Range(1, 101) <= 10)
             {
+               // OnEncountered();
                 if (debugMode)
                 {
-                    Debug.Log("Triggered a battle! ");
+                    Debug.Log("Encountered! ");
                 }
+              //  CheckForEncounters();
             }
         }
     }

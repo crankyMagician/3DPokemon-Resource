@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30b01219c74be0442bf906b9f71bdec7, type: 3}
   m_Name: Monster
   m_EditorClassIdentifier: 
-  monsterName: 
-  description: 
-  frontSprite: {fileID: 0}
-  backSprite: {fileID: 0}
-  type1: 0
-  type2: 0
+  monsterName: Squishy
+  description: It's squishy
+  frontSprite: {fileID: 8233071653059976297, guid: 6092738183c668a4d924383acaf9eb5f, type: 3}
+  backSprite: {fileID: -9111473675286820144, guid: c81e052fa185f244eb6a60e1c45dcf8f, type: 3}
+  type1: 9
+  type2: 3
   learnableMoves: []
   maxHp: 0
   attack: 0
