@@ -1,16 +1,37 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TrainerController : MonoBehaviour
 {
-    [SerializeField] Dialog dialog;
-    [SerializeField] GameObject exclamation;
-    [SerializeField] GameObject fov;
 
+    public event Action OnEncountered;
+
+    [SerializeField]
+    public MonsterParty enemyParty;
+    /// <summary>
+    /// Added properties above line 
+    /// </summary>
+   
+    public string enemyName;
+
+
+    [SerializeField] 
+    Dialog dialog;
+    [SerializeField] 
+    GameObject exclamation;
+    [SerializeField]
+    GameObject fov;
+
+
+
+
+    
     Character character;
     private void Awake()
     {
+        enemyParty = GetComponent<MonsterParty>();
         character = GetComponent<Character>();
     }
 
@@ -18,7 +39,7 @@ public class TrainerController : MonoBehaviour
     {
        // SetFovRotation(character.Animator.DefaultDirection);
     }
-
+    /*
     public IEnumerator TriggerTrainerBattle(PlayerController player)
     {
         // Show Exclamation
@@ -37,8 +58,14 @@ public class TrainerController : MonoBehaviour
         StartCoroutine(DialogManager.Instance.ShowDialog(dialog, () =>
         {
             Debug.Log("Starting Trainer Battle");
+           // player.public
         }));
+      //  TrainerController.OnEncountered
+        
+       
+
     }
+    */
 
     //must be modded for 3D
     /*

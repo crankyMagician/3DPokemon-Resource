@@ -5,7 +5,23 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+
+    [Tooltip("Layermasks")]
+
+    [SerializeField]
+
+    private LayerMask playerLayer;
+    [Tooltip("The radius of the overlap sphere")]
+
+    [SerializeField]
+    private float cubeRadius = 3f;
+/// <summary>
+/// Below is pre edits to this script
+/// </summary>
+
     public float moveSpeed;
+
+  
 
     public bool IsMoving { get; private set; }
 
@@ -51,7 +67,9 @@ public class Character : MonoBehaviour
         var diff = targetPos - transform.position;
         var dir = diff.normalized;
 
-        if (Physics2D.BoxCast(transform.position + dir, new Vector2(0.2f, 0.2f), 0f, dir, diff.magnitude - 1, GameLayers.i.SolidLayer | GameLayers.i.InteractableLayer | GameLayers.i.PlayerLayer) == true)
+        if (Physics.OverlapSphere(transform.position, cubeRadius, playerLayer) != null)
+            Debug.Log("Encountered player");
+            // if (Physics.BoxCast(transform.position + dir, new Vector2(0.2f, 0.2f), 0f, dir, diff.magnitude - 1, GameLayers.i.SolidLayer | GameLayers.i.InteractableLayer | GameLayers.i.PlayerLayer))//(Physics2D.BoxCast(transform.position + dir, new Vector2(0.2f, 0.2f), 0f, dir, diff.magnitude - 1, GameLayers.i.SolidLayer | GameLayers.i.InteractableLayer | GameLayers.i.PlayerLayer) == true)
             return false;
 
         return true;
@@ -85,4 +103,12 @@ public class Character : MonoBehaviour
         get => animator;
     }
     */
+
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, cubeRadius);
+    }
 }

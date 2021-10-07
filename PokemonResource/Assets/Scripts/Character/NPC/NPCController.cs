@@ -76,7 +76,7 @@ public class NPCController : MonoBehaviour, Interactable
         state = NPCState.Idle;
     }
 
-
+    /*
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -86,6 +86,7 @@ public class NPCController : MonoBehaviour, Interactable
         }
        
     }
+    */
 }
 
 public enum NPCState { Idle, Walking, Dialog }

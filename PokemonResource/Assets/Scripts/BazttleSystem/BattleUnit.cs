@@ -8,12 +8,23 @@ public class BattleUnit : MonoBehaviour
 {
 
 
-    [SerializeField] bool isPlayerUnit;
-    [SerializeField] BattleHud hud;
+    [SerializeField]
+    bool isPlayerUnit;
+
+    [SerializeField] 
+    bool isEnemyUnit;
+
+    [SerializeField] 
+    BattleHud hud;
 
     public bool IsPlayerUnit
     {
         get { return isPlayerUnit; }
+    }
+
+    public bool IsEnemyUnit
+    {
+        get { return isEnemyUnit; }
     }
 
     public BattleHud Hud

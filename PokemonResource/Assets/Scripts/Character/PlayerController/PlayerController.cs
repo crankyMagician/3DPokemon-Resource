@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
 
     public event Action<Collider> OnEnterTrainersView;
 
+    //testing to start trianaer battle
+    public event Action OnEnterTrainerBattle;
+
     [Space(2)]
 
     [Header("Values")]
@@ -113,7 +116,9 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleUpdate();
-       // CheckForEncounters();
+        //trying to battle
+       // CheckIfInTrainersView();
+        // CheckForEncounters();
     }
 
 
@@ -172,13 +177,14 @@ public class PlayerController : MonoBehaviour
         CheckForEncounters();
     }
     */
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
        // Debug.Log("Triggered a battle! ");
         if (other.gameObject.CompareTag("EncounterSpace"))
         {
-            OnEncountered();
-
+            // OnEncountered();
+           // CheckForEncounters();
+           /*
             if (UnityEngine.Random.Range(1, 101) <= 10)
             {
                // OnEncountered();
@@ -186,12 +192,32 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("Encountered! ");
                 }
-              //  CheckForEncounters();
+                
             }
+           */
+
+
+
+        }
+
+        if (other.gameObject.CompareTag("Trainer"))
+        {
+            Debug.Log("Triggered a trainer battle! ");
+            OnEnterTrainersView?.Invoke(other.gameObject.GetComponent<Collider>());//[hitcol]);
+            //var collider = other.gameObject.Ge
         }
     }
 
-   
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Trainer"))
+        {
+            Debug.Log("Triggered a trainer battle! ");
+            OnEnterTrainersView?.Invoke(collision.collider);//[hitcol]);
+        }
+    }
+
     //is the player touching grass? Check for battles 
     private void CheckForEncounters()
     {
@@ -204,7 +230,7 @@ public class PlayerController : MonoBehaviour
                
                 if (debugMode)
                 {
-                    Debug.Log("Triggered a battle! ");
+                    Debug.Log("Triggered a wild monster battle! ");
                     //OnEncountered();
                 }
 
@@ -215,12 +241,21 @@ public class PlayerController : MonoBehaviour
 
     }
 
+   
+
 
     private void CheckIfInTrainersView()
     {
       //  var collider = Physics.OverlapSphere(transform.position, sphereRadius, GameLayers.i.FovLayer);
         if (Physics.OverlapSphere(transform.position, sphereRadius, trainerBattle) != null)
         {
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, sphereRadius, trainerBattle);
+            
+            foreach (Collider hitCol in hitColliders)
+            {
+                Debug.Log("Triggered a trainer battle! ");
+                OnEnterTrainersView?.Invoke(hitCol);//[hitcol]);
+            }
             //character.Animator.IsMoving = false;
            // OnEnterTrainersView?.Invoke(collider[]);
         }

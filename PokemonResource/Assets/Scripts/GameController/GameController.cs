@@ -6,11 +6,18 @@ public enum GameState { FreeRoam, Battle, Dialog, Cutscene }
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] PlayerController playerController;
-    [SerializeField] BattleSystem battleSystem;
-    [SerializeField] Camera worldCamera;
+    [SerializeField]
+    PlayerController playerController;
+    [SerializeField] 
+    BattleSystem battleSystem;
+    [SerializeField]
+    Camera worldCamera;
 
     GameState state;
+
+    //addded
+    [SerializeField]
+    TrainerController trainerController;
 
     private void Awake()
     {
@@ -28,9 +35,14 @@ public class GameController : MonoBehaviour
             if (trainer != null)
             {
                 state = GameState.Cutscene;
-                StartCoroutine(trainer.TriggerTrainerBattle(playerController));
+               // StartCoroutine(trainer.TriggerTrainerBattle(playerController));
+                trainerController = trainer;
+                StartTrainerBattle();
+                //trainer.OnEncountered += StartTrainerBattle;
             }
         };
+
+       // trainerController.OnEncountered += StartTrainerBattle;
 
         DialogManager.Instance.OnShowDialog += () =>
         {
@@ -43,7 +55,18 @@ public class GameController : MonoBehaviour
                 state = GameState.FreeRoam;
         };
     }
+    void StartTrainerBattle()
+    {
+        state = GameState.Battle;
+        battleSystem.gameObject.SetActive(true);
+        worldCamera.gameObject.SetActive(false);
 
+        var playerParty = playerController.GetComponent<MonsterParty>();
+        //
+        var enemyParty = trainerController;//.GetComponent<MonsterParty>();
+
+        battleSystem.StartTrainerBattle(playerParty, enemyParty);
+    }
     void StartBattle()
     {
         state = GameState.Battle;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, PartyScreen, BattleOver}
+public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, PartyScreen, TrainerBattle, BattleOver}
 public enum BattleAction { Move, SwitchPokemon, UseItem, Run }
 
 public class BattleSystem : MonoBehaviour
@@ -21,8 +21,47 @@ public class BattleSystem : MonoBehaviour
     int currentMove;
     int currentMember;
 
-   MonsterParty playerParty;
+    [Tooltip("The party of the player ")]
+    MonsterParty playerParty;
+    [Tooltip("A wild monster ")]
     Monster wildMonsters;
+    [SerializeField]
+    [Tooltip("The party of the enemy ")]
+    MonsterParty enemyParty;
+    ////////
+    /// <summary>
+    /// Trying to trinaer battle 
+    /// </summary>
+    
+    public void StartTrainerBattle(MonsterParty playerParty, TrainerController trainerController)
+    {
+        this.playerParty = playerParty;
+
+        this.enemyParty = trainerController.enemyParty;
+
+        Debug.Log("Began trainter battle");
+        //start a battle passing the trainer controller to put the name in the dialogoue box
+        StartCoroutine(SetupTrainerBattle(trainerController));
+    }
+
+
+    public IEnumerator SetupTrainerBattle(TrainerController enemyParty)
+    {
+        playerUnit.Setup(playerParty.GetHealthyPokemon());
+
+        enemyUnit.Setup(enemyParty.enemyParty.GetHealthyPokemon());
+
+        partyScreen.Init();
+
+        dialogBox.SetMoveNames(playerUnit.Monster.Moves);
+
+        yield return dialogBox.TypeDialog($"{enemyParty.enemyName} wants to battle ");
+        state =BattleState.TrainerBattle;
+        ActionSelection();
+    }
+    /// <summary>
+    /// Above this line ia augmented base code
+    /// </summary>
 
     public void StartBattle(MonsterParty playerParty, Monster wildMonsters)
     {
@@ -46,31 +85,34 @@ public class BattleSystem : MonoBehaviour
 
         ActionSelection();
     }
+
     //If you run from battle Run Turn as run else the battle is over and the battle was not won 
     void RunningFromBattle()
     {
 
-       
-        if (UnityEngine.Random.Range(1, 101) <= 10)
+       if(state != BattleState.TrainerBattle)
         {
-            // StartCoroutine(RunTurns(BattleAction.Move));
+            if (UnityEngine.Random.Range(1, 101) <= 10)
+            {
 
-            // var selectedPokemon = playerParty.Monsters[currentMember];
-            //state = BattleAction.Run;
-           // Debug.Log("Failed to run from battle");
-            StartCoroutine(RunTurns(BattleAction.Run));
+                StartCoroutine(RunTurns(BattleAction.Run));
 
-            //   yield return SwitchPokemon(selectedPokemon);
+                //   yield return SwitchPokemon(selectedPokemon);
 
+            }
+
+            else
+            {
+                state = BattleState.BattleOver;
+                OnBattleOver(false);
+                // Debug.Log("Ran from battle");
+            }
         }
-        
-        else
-        {
-            state = BattleState.BattleOver;
-            OnBattleOver(false);
-            Debug.Log("Ran from battle");
-        }
-        
+       //fix here 
+       // StartCoroutine(RunTurns(BattleAction.Run));
+
+
+
     }
     void BattleOver(bool won)
     {
