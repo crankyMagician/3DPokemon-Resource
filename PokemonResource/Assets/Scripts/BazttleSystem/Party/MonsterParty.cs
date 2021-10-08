@@ -28,4 +28,17 @@ public class MonsterParty : MonoBehaviour
     {
         return pokemons.Where(x => x.HP > 0).FirstOrDefault();
     }
+
+    public void AddMonster(Monster newMonster)
+    {
+        if(pokemons.Count < 6)
+        {
+            pokemons.Add(newMonster);
+        }
+
+        else
+        {
+            //Add to pc / monster dex when it is completed 
+        }
+    }
 }

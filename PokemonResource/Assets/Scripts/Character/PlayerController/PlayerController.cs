@@ -177,6 +177,23 @@ public class PlayerController : MonoBehaviour
         CheckForEncounters();
     }
     */
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("EncounterSpace"))
+        {
+            if (UnityEngine.Random.Range(1, 101) <= 10)
+            {
+                OnEncountered();
+                if (debugMode)
+                {
+                    Debug.Log("Encountered! ");
+                }
+
+            }
+        }
+
+    }
     private void OnTriggerEnter(Collider other)
     {
        // Debug.Log("Triggered a battle! ");
@@ -184,17 +201,9 @@ public class PlayerController : MonoBehaviour
         {
             // OnEncountered();
            // CheckForEncounters();
-           /*
-            if (UnityEngine.Random.Range(1, 101) <= 10)
-            {
-               // OnEncountered();
-                if (debugMode)
-                {
-                    Debug.Log("Encountered! ");
-                }
-                
-            }
-           */
+           
+          
+           
 
 
 

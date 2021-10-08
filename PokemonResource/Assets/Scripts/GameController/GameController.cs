@@ -76,7 +76,9 @@ public class GameController : MonoBehaviour
         var playerParty = playerController.GetComponent<MonsterParty>();
         var wildPokemon = FindObjectOfType<MapArea>().GetComponent<MapArea>().GetRandomWildPokemon();
 
-        battleSystem.StartBattle(playerParty, wildPokemon);
+        var wildPokemonCopy = new Monster(wildPokemon.Base, wildPokemon.Level);
+
+        battleSystem.StartBattle(playerParty, wildPokemonCopy);
     }
 
     void EndBattle(bool won)

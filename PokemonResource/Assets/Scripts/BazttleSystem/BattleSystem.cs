@@ -3,15 +3,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, PartyScreen, TrainerBattle, BattleOver}
+public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, PartyScreen, BattleOver }// TrainerBattle, 
 public enum BattleAction { Move, SwitchPokemon, UseItem, Run }
 
 public class BattleSystem : MonoBehaviour
 {
+    [Header("Battle Components")]
     [SerializeField] BattleUnit playerUnit;
     [SerializeField] BattleUnit enemyUnit;
     [SerializeField] BattleDialogBox dialogBox;
     [SerializeField] PartyScreen partyScreen;
+
+    //ADDED
+    //
+    [SerializeField]
+    private PlayerController playerController;
+
+    [SerializeField]
+    private TrainerController trainerController;
+
+    [Space(3)]
+    [Header("Catching Monsters")]
+    [SerializeField]
+    int catchRate = 2555;
+
+
+
+    [Space(3)]
+    [Header("Items")]
+
+    [SerializeField]
+    private GameObject monsterBallObj;
+
+
 
     public event Action<bool> OnBattleOver;
 
@@ -21,6 +45,7 @@ public class BattleSystem : MonoBehaviour
     int currentMove;
     int currentMember;
 
+   
     [Tooltip("The party of the player ")]
     MonsterParty playerParty;
     [Tooltip("A wild monster ")]
@@ -28,6 +53,11 @@ public class BattleSystem : MonoBehaviour
     [SerializeField]
     [Tooltip("The party of the enemy ")]
     MonsterParty enemyParty;
+    [Tooltip("The bool to determine if this is a trainer battle")]
+    public bool isTrainerBattle;
+
+
+
     ////////
     /// <summary>
     /// Trying to trinaer battle 
@@ -36,6 +66,8 @@ public class BattleSystem : MonoBehaviour
     public void StartTrainerBattle(MonsterParty playerParty, TrainerController trainerController)
     {
         this.playerParty = playerParty;
+
+        this.trainerController = trainerController;
 
         this.enemyParty = trainerController.enemyParty;
 
@@ -47,6 +79,8 @@ public class BattleSystem : MonoBehaviour
 
     public IEnumerator SetupTrainerBattle(TrainerController enemyParty)
     {
+        //trainerController = enemyParty;
+
         playerUnit.Setup(playerParty.GetHealthyPokemon());
 
         enemyUnit.Setup(enemyParty.enemyParty.GetHealthyPokemon());
@@ -56,7 +90,8 @@ public class BattleSystem : MonoBehaviour
         dialogBox.SetMoveNames(playerUnit.Monster.Moves);
 
         yield return dialogBox.TypeDialog($"{enemyParty.enemyName} wants to battle ");
-        state =BattleState.TrainerBattle;
+        isTrainerBattle = true;
+        //state =BattleState.TrainerBattle;
         ActionSelection();
     }
     /// <summary>
@@ -68,6 +103,8 @@ public class BattleSystem : MonoBehaviour
         this.playerParty = playerParty;
 
         this.wildMonsters = wildMonsters;
+
+        
 
         StartCoroutine(SetupBattle());
     }
@@ -90,8 +127,10 @@ public class BattleSystem : MonoBehaviour
     void RunningFromBattle()
     {
 
-       if(state != BattleState.TrainerBattle)
-        {
+      // if(state != BattleState.TrainerBattle)
+        //{
+
+      
             if (UnityEngine.Random.Range(1, 101) <= 10)
             {
 
@@ -107,11 +146,11 @@ public class BattleSystem : MonoBehaviour
                 OnBattleOver(false);
                 // Debug.Log("Ran from battle");
             }
-        }
-       //fix here 
-       // StartCoroutine(RunTurns(BattleAction.Run));
-
-
+      //  }
+        //fix here 
+        // StartCoroutine(RunTurns(BattleAction.Run));
+        // StartCoroutine(RunTurns(BattleAction.Run));
+       // StartCoroutine(FailedToRunFromBattle());
 
     }
     void BattleOver(bool won)
@@ -130,7 +169,9 @@ public class BattleSystem : MonoBehaviour
 
     void OpenPartyScreen()
     {
+        Debug.Log("Open party screen");
         state = BattleState.PartyScreen;
+       // partyScreen.gameObject.SetActive(true);
         partyScreen.SetPartyData(playerParty.Monsters);
         partyScreen.gameObject.SetActive(true);
     }
@@ -192,13 +233,20 @@ public class BattleSystem : MonoBehaviour
                 yield return SwitchPokemon(selectedPokemon);
             }
 
-            if(playerAction == BattleAction.Run)
+            else if(playerAction == BattleAction.Run)
             {
                 Debug.Log("Failed turn taking place");
                 state = BattleState.Busy;
                 yield return FailedToRunFromBattle();
               //  FailedRunFromBattle(enemyUnit, playerUnit, enemyMove);
             }
+
+            else if(playerAction == BattleAction.UseItem)
+            {
+                yield return ThrowPokeball();
+            }
+
+
             // Enemy Turn
             var enemyMove = enemyUnit.Monster.GetRandomMove();
             yield return RunMove(enemyUnit, playerUnit, enemyMove);
@@ -361,12 +409,53 @@ public class BattleSystem : MonoBehaviour
         {
             var nextPokemon = playerParty.GetHealthyPokemon();
             if (nextPokemon != null)
+            {
+                Debug.Log("Get new pokemon ");
                 OpenPartyScreen();
+            }
+
             else
+            {
                 BattleOver(false);
+                Debug.Log("Lost");
+            }
+
         }
-        else
+        //added
+        if (!faintedUnit.IsPlayerUnit && isTrainerBattle)
+        {
+            var nextPokemon = enemyParty.GetHealthyPokemon();
+            if (nextPokemon != null)
+            {
+                Debug.Log("Putting out new enemy pokemon");
+                enemyUnit.Setup(nextPokemon);
+            }
+            if(nextPokemon == null)
+            {
+                Debug.Log("Trainter battle over?");
+                isTrainerBattle = false;
+                BattleOver(true); ;
+            }
+
+           // else
+                //Debug.Log("Trainter battle over?");
+                //isTrainerBattle = false;
+             //   BattleOver(false); ;
+         // */
+        }
+        if (!faintedUnit.IsPlayerUnit && !isTrainerBattle)
+        {
+            Debug.Log("Won the battle");
             BattleOver(true);
+        }
+        /*
+        else
+        {
+            Debug.Log("Here lies my problem");
+            BattleOver(true);
+        }
+        */
+           
     }
 
     IEnumerator ShowDamageDetails(DamageDetails damageDetails)
@@ -393,6 +482,11 @@ public class BattleSystem : MonoBehaviour
         else if (state == BattleState.PartyScreen)
         {
             HandlePartySelection();
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            StartCoroutine(ThrowPokeball());
         }
     }
 
@@ -421,6 +515,7 @@ public class BattleSystem : MonoBehaviour
             else if (currentAction == 1)
             {
                 // Bag
+                StartCoroutine(RunTurns(BattleAction.UseItem));
             }
             else if (currentAction == 2)
             {
@@ -431,7 +526,15 @@ public class BattleSystem : MonoBehaviour
             else if (currentAction == 3)
             {
                 // Run
-                RunningFromBattle();
+                if (!isTrainerBattle)
+                {
+                    RunningFromBattle();
+                }
+                else
+                {
+                    Debug.Log("You cannot run from a trainer battle");
+                }
+               
             }
         }
     }
@@ -537,4 +640,131 @@ public class BattleSystem : MonoBehaviour
 
         state = BattleState.RunningTurn;
     }
+    /// 
+    /// 
+    /// /Cleaning up trainer battles 
+    /// 
+
+    IEnumerator SendNextTrainerPokemon()
+    {
+        state = BattleState.Busy;
+
+        var nextPokemon = enemyParty.GetHealthyPokemon();
+
+        enemyUnit.Setup(nextPokemon);
+
+
+        yield return dialogBox.TypeDialog($"Trainer changes monsters");
+
+        state = BattleState.RunningTurn;
+    }
+
+
+
+    /*
+     * Adding Items 
+     */
+    //
+    //first throw pokeball
+    #region Items
+    #region Catching Monsters 
+    IEnumerator ThrowPokeball()
+    {
+
+        state = BattleState.Busy;
+
+
+        if (isTrainerBattle)
+        {
+            yield return dialogBox.TypeDialog($"You cannot catch another trainer's monster ");
+
+            state = BattleState.RunningTurn;
+
+            yield break;
+        }
+        
+        yield return dialogBox.TypeDialog($"Throws a pokeball ");
+        //v
+
+        var pokeballObj = monsterBallObj.GetComponent<Sprite>();
+        Instantiate(monsterBallObj, playerUnit.transform.position, Quaternion.identity);
+
+
+        int shakeCount = TryToCatchPokemon(enemyUnit.Monster);
+
+        for (int i = 0; i < Mathf.Min(shakeCount, 3); i++)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            
+        }
+
+        if(shakeCount == 4)
+        {
+            //the monster has been caught 
+            yield return dialogBox.TypeDialog($"{ enemyUnit.Monster.Base.Name} was captured ");
+
+            playerParty.AddMonster(enemyUnit.Monster);
+            //destroy the pokemon
+            Destroy(pokeballObj);
+            //the battle is done
+            BattleOver(true);
+
+
+        }
+        else
+        {
+            //the monster has escaped 
+            yield return new WaitForSeconds(1f);
+
+            if(shakeCount < 2)
+            {
+                yield return dialogBox.TypeDialog($"{enemyUnit.Monster.Base.Name} broke free");
+
+            }
+            else
+            {
+                yield return dialogBox.TypeDialog($"Almost caught it");
+            }
+
+            Destroy(pokeballObj);
+
+
+            state = BattleState.RunningTurn;
+        }
+
+    }
+
+
+
+    int TryToCatchPokemon(Monster monster)
+    {
+        float a = (3* monster.MaxHp - 2 * monster.HP) * monster.Base.CatchRate * ConditionsDB.GetStatusBonus(monster.Status) / (3 * monster.MaxHp);
+
+        if(a >= 255)
+        {
+            return 4;
+        }
+
+        float b =1048560 / Mathf.Sqrt(Mathf.Sqrt(16711680 / a));
+
+        int shakeCount = 0;
+
+        while(shakeCount < 4)
+        {
+            if(UnityEngine.Random.Range(0, 65535) >= b)
+            {
+                break;
+            }
+
+            ++shakeCount;
+        }
+
+        return shakeCount;
+
+    }
+    #endregion Catching Monsters
+    #endregion Items
+
+
 }

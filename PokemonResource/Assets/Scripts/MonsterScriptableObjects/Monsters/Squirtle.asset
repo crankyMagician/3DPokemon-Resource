@@ -27,3 +27,4 @@ MonoBehaviour:
   spAttack: 10
   spDefense: 5
   speed: 5
+  catchRate: 255

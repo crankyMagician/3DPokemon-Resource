@@ -45,6 +45,12 @@ public class MonsterBase : ScriptableObject
     [SerializeField] int spDefense;
     [SerializeField] int speed;
 
+    [SerializeField]
+    private int catchRate;
+
+    public int CatchRate => catchRate;
+   
+
     public string Name
     {
         get { return monsterName; }

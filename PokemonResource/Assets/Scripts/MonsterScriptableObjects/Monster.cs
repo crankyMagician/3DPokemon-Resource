@@ -13,6 +13,16 @@ public class Monster //: MonoBehaviour
 
 
     //getting the getters
+    public Monster(MonsterBase pBase, int pLevel)
+    {
+        _base = pBase;
+
+        level = pLevel;
+
+        Init();
+    }
+
+
     public MonsterBase Base
     {
         get
@@ -39,7 +49,7 @@ public class Monster //: MonoBehaviour
     public int VolatileStatusTime { get; set; }
 
 
-    public Queue<string> StatusChanges { get; private set; } = new Queue<string>();
+    public Queue<string> StatusChanges { get; private set; } 
     public bool HpChanged { get; set; }
     public event System.Action OnStatusChanged;
 
@@ -58,6 +68,8 @@ public class Monster //: MonoBehaviour
 
         CalculateStats();
         HP = MaxHp;
+
+        StatusChanges = new Queue<string>();
 
         ResetStatBoost();
         Status = null;

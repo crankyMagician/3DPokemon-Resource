@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b01219c74be0442bf906b9f71bdec7, type: 3}
+  m_Name: BulbaGod
+  m_EditorClassIdentifier: 
+  monsterName: BulbaGod
+  description: 'Dont fuck wit this bulbasaur '
+  frontSprite: {fileID: 21300000, guid: 0f37bf3cf5680a64d863b5f155b2a597, type: 3}
+  backSprite: {fileID: 21300000, guid: aacaae602a38f884ab9e02e43de3736d, type: 3}
+  type1: 2
+  type2: 15
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 859d3ac1e9d0993459998a465e559d4c, type: 2}
+    level: 0
+  - moveBase: {fileID: 11400000, guid: 078c75ee8f452f044b12c05ae7a6eced, type: 2}
+    level: 0
+  maxHp: 1
+  attack: 100
+  defense: 100
+  spAttack: 100
+  spDefense: 100
+  speed: 100
+  catchRate: 255
