@@ -191,9 +191,12 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("Open party screen");
         state = BattleState.PartyScreen;
        // partyScreen.gameObject.SetActive(true);
-        partyScreen.SetPartyData(playerParty.Monsters);
+
+     //   partyScreen.SetPartyData(playerParty.Monsters);
         partyScreen.gameObject.SetActive(true);
     }
+
+
 
     void MoveSelection()
     {
@@ -931,5 +934,10 @@ public class BattleSystem : MonoBehaviour
     #endregion Catching Monsters
     #endregion Items
 
+
+    public PartyScreen PartyScreen => partyScreen;
+
+    public MonsterParty PlayerParty { get; private set; }
+    public MonsterParty TrainerParty { get; private set; }
 
 }

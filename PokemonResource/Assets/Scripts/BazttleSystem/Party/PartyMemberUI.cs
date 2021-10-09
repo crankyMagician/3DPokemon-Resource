@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-public class PartyMemberUI : MonoBehaviour
+public class PartyMemberUI : MonoBehaviour, ISelectableItem
 {
     [SerializeField] TMP_Text nameText;
     [SerializeField] TMP_Text levelText;
@@ -12,6 +12,33 @@ public class PartyMemberUI : MonoBehaviour
     [SerializeField] Color highlightedColor;
 
     Monster _monster;
+
+
+
+
+    public void Init(Monster monster)
+    {
+        _monster = monster;
+        UpdateData();
+
+        _monster.OnHPChanged += UpdateData;
+    }
+
+
+    void UpdateData()
+    {
+        nameText.text = _monster.Base.Name;
+        levelText.text = "Lvl " + _monster.Level;
+        hpBar.SetHP((float)_monster.HP / _monster.MaxHp);
+    }
+
+    public void OnSelectionChanged(bool selected)
+    {
+        if (selected)
+            nameText.color = Color.yellow;
+        else
+            nameText.color = Color.black;
+    }
 
     public void SetData(Monster monster)
     {

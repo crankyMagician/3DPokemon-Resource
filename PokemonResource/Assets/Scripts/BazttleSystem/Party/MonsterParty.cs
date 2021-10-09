@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,9 @@ public class MonsterParty : MonoBehaviour
 {
     [SerializeField] List<Monster> pokemons;
 
+
+    public event Action OnUpdated;
+
     public List<Monster> Monsters
     {
         get
@@ -17,6 +21,8 @@ public class MonsterParty : MonoBehaviour
         set
         {
             pokemons = value;
+
+            OnUpdated?.Invoke();
         }
     }
 
@@ -38,6 +44,7 @@ public class MonsterParty : MonoBehaviour
         if(pokemons.Count < 6)
         {
             pokemons.Add(newMonster);
+            OnUpdated?.Invoke();
         }
 
         else
@@ -45,4 +52,11 @@ public class MonsterParty : MonoBehaviour
             //Add to pc / monster dex when it is completed 
         }
     }
+
+
+    public static MonsterParty GetPlayerParty()
+    {
+        return FindObjectOfType<PlayerController>().GetComponent<MonsterParty>();
+    }
+
 }
