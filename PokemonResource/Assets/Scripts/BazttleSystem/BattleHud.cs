@@ -89,7 +89,7 @@ public class BattleHud : MonoBehaviour
 
         float normalizedExp = GetNormalizedExp();
 
-        expBar.transform.localScale = new Vector3(normalizedExp, 1, 1);
+      //  expBar.transform.localScale = new Vector3(normalizedExp, 1, 1);
 
     }
 

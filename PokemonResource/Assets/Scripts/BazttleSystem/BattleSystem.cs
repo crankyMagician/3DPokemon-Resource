@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, PartyScreen, BattleOver }// TrainerBattle, 
+public enum BattleState { Start, ActionSelection, MoveSelection, RunningTurn, Busy, PartyScreen, MoveToForget, BattleOver }// TrainerBattle, 
 public enum BattleAction { Move, SwitchPokemon, UseItem, Run }
 
 public class BattleSystem : MonoBehaviour
@@ -14,6 +15,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] BattleUnit enemyUnit;
     [SerializeField] BattleDialogBox dialogBox;
     [SerializeField] PartyScreen partyScreen;
+    [SerializeField] MoveSelectionUI moveSelectionUI;
 
 
 
@@ -35,7 +37,7 @@ public class BattleSystem : MonoBehaviour
 
     [Space(3)]
     [Header("Items")]
-
+    
     [SerializeField]
     private GameObject monsterBallObj;
 
@@ -487,6 +489,11 @@ public class BattleSystem : MonoBehaviour
                     {
                         //Must teach how to forget move 
 
+                        yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} knows 4 moves already. Forget a move and learn {newMove.Base.Name}?");
+
+
+                        yield return ChooseMoveToForget(playerUnit.Monster, newMove.Base);
+                       // dialogBox.SetMoveNames(playerUnit.Monster.Moves);
                     }
                 }
 
@@ -763,6 +770,22 @@ public class BattleSystem : MonoBehaviour
      */
     //
     //first throw pokeball
+    #region Leveling Up
+
+    IEnumerator ChooseMoveToForget(Monster monster, MoveBase newMove)
+    {
+        state = BattleState.Busy;
+
+        yield return dialogBox.TypeDialog($"Choose a move to forget ");
+
+        moveSelectionUI.gameObject.SetActive(true);
+
+        moveSelectionUI.SetMoveData(monster.Moves.Select(x=> x.Base).ToList(), newMove);//[0].Base);
+
+
+        state = BattleState.MoveToForget;
+    }
+    #endregion
     #region Items
     #region Catching Monsters 
     IEnumerator ThrowPokeball()
