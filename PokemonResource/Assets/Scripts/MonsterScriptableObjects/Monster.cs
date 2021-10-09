@@ -38,6 +38,10 @@ public class Monster //: MonoBehaviour
         }
     }
 
+    #region Monster Info
+
+   
+    public int Exp { get; set; }
     public int HP { get; set; }
     public List<Move> Moves { get; set; }
     public Move CurrentMove { get; set; }
@@ -48,10 +52,11 @@ public class Monster //: MonoBehaviour
     public Condition VolatileStatus { get; private set; }
     public int VolatileStatusTime { get; set; }
 
-
+    #endregion
     public Queue<string> StatusChanges { get; private set; } 
     public bool HpChanged { get; set; }
     public event System.Action OnStatusChanged;
+
 
     public void Init()
     {
@@ -62,9 +67,13 @@ public class Monster //: MonoBehaviour
             if (move.Level <= Level)
                 Moves.Add(new Move(move.Base));
 
-            if (Moves.Count >= 4)
+            if (Moves.Count >= MonsterBase.MaxNumOfMoves)
                 break;
         }
+
+
+        //setting exp earned 
+        Exp = Base.GetExpForLevel(level);
 
         CalculateStats();
         HP = MaxHp;
@@ -135,7 +144,34 @@ public class Monster //: MonoBehaviour
             Debug.Log($"{stat} has been boosted to {StatBoosts[stat]}");
         }
     }
+    #region Leveling Up
 
+    public bool CheckForLevelUp()
+    {
+        if(Exp > Base.GetExpForLevel(level + 1))
+        {
+            ++level;
+            return true; 
+        }
+        return false;
+    }
+
+    public LearnableMove GetLearnableMoveAtCurrentLevel()
+    {
+        return Base.LearnableMoves.Where(x => x.Level == level).FirstOrDefault();
+    }
+
+    public void LearnMove(LearnableMove moveToLearn)
+    {
+        if(Moves.Count > MonsterBase.MaxNumOfMoves)
+        {
+            return;
+        }
+
+        Moves.Add(new Move(moveToLearn.Base));
+    }
+
+    #endregion
     public int Attack
     {
         get { return GetStat(Stat.Attack); }

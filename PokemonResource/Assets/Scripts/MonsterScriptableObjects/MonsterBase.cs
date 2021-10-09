@@ -33,8 +33,26 @@ public class MonsterBase : ScriptableObject
     [Tooltip("A list of move the monster learns naturally")]
     [SerializeField] List<LearnableMove> learnableMoves;
 
+    public static int MaxNumOfMoves {get; set;} = 4;
+
+
+
+    public int GetExpForLevel(int level)
+    {
+        if(growthRate == GrowthRate.Fast)
+        {
+            return 4 * (level* level * level) / 5;
+        }
+        else if(growthRate == GrowthRate.MediumFast)
+        {
+            return level * level * level;
+        }
+
+        return -1; 
+    }
+
     [Space(2)]
-    [Header("Monster Stats")]
+    [Header("Monster Battle Stats")]
    
 
     // Base Stats
@@ -45,12 +63,26 @@ public class MonsterBase : ScriptableObject
     [SerializeField] int spDefense;
     [SerializeField] int speed;
 
+    [Space(2)]
+    [Header("Catch Rate & Exp Yield ")]
     [SerializeField]
     private int catchRate;
 
-    public int CatchRate => catchRate;
-   
+    [SerializeField]
 
+    private int expYield;
+
+    [SerializeField]
+    GrowthRate growthRate;
+
+
+    public int CatchRate => catchRate;
+
+    public int ExpYield => expYield;
+
+    public GrowthRate  GrowthRate=> growthRate;
+
+    #region Monster Information
     public string Name
     {
         get { return monsterName; }
@@ -116,6 +148,8 @@ public class MonsterBase : ScriptableObject
         get { return learnableMoves; }
     }
 
+
+    #endregion
 }
 
 
@@ -170,6 +204,12 @@ public enum Stat
     Evasion
 }
 
+
+public enum GrowthRate
+{
+    Fast,
+    MediumFast
+}
 
 public class TypeChart
 {

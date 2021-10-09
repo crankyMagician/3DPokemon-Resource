@@ -9,10 +9,14 @@ public enum BattleAction { Move, SwitchPokemon, UseItem, Run }
 public class BattleSystem : MonoBehaviour
 {
     [Header("Battle Components")]
+    [SerializeField] GameObject battleCamera;
     [SerializeField] BattleUnit playerUnit;
     [SerializeField] BattleUnit enemyUnit;
     [SerializeField] BattleDialogBox dialogBox;
     [SerializeField] PartyScreen partyScreen;
+
+
+
 
     //ADDED
     //
@@ -65,13 +69,16 @@ public class BattleSystem : MonoBehaviour
     
     public void StartTrainerBattle(MonsterParty playerParty, TrainerController trainerController)
     {
+
         this.playerParty = playerParty;
 
         this.trainerController = trainerController;
 
         this.enemyParty = trainerController.enemyParty;
 
-        Debug.Log("Began trainter battle");
+        battleCamera.SetActive(true);
+
+        Debug.Log("Began trainer battle");
         //start a battle passing the trainer controller to put the name in the dialogoue box
         StartCoroutine(SetupTrainerBattle(trainerController));
     }
@@ -104,7 +111,8 @@ public class BattleSystem : MonoBehaviour
 
         this.wildMonsters = wildMonsters;
 
-        
+        isTrainerBattle = false;
+        battleCamera.SetActive(true);
 
         StartCoroutine(SetupBattle());
     }
@@ -307,13 +315,18 @@ public class BattleSystem : MonoBehaviour
                 }
             }
 
+            //monster fainting 
             if (targetUnit.Monster.HP <= 0)
             {
+
+                yield return HandleMonsterFainted(targetUnit);
+                /*
                 yield return dialogBox.TypeDialog($"{targetUnit.Monster.Base.Name} Fainted");
                 //targetUnit.PlayFaintAnimation();
                 yield return new WaitForSeconds(2f);
 
                 CheckForBattleOver(targetUnit);
+                */
             }
 
         }
@@ -361,11 +374,21 @@ public class BattleSystem : MonoBehaviour
         yield return sourceUnit.Hud.UpdateHP();
         if (sourceUnit.Monster.HP <= 0)
         {
+
+            /*
             yield return dialogBox.TypeDialog($"{sourceUnit.Monster.Base.Name} Fainted");
             //sourceUnit.PlayFaintAnimation();
             yield return new WaitForSeconds(2f);
+            //checking for faint 
+            */
+            yield return HandleMonsterFainted(sourceUnit);
+            //CheckForBattleOver(sourceUnit);
 
-            CheckForBattleOver(sourceUnit);
+            //added 
+            yield return new WaitUntil(() => state == BattleState.RunningTurn);
+            ///
+            ///
+            ///
         }
     }
 
@@ -403,6 +426,80 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    //this is what happens when any pokemon faints
+    IEnumerator HandleMonsterFainted(BattleUnit faintedUnit)
+    {
+        yield return dialogBox.TypeDialog($"{faintedUnit.Monster.Base.Name} fainted");
+
+        //faintedUnit.PlayFaintAnimation();
+
+        yield return new WaitForSeconds(2f);
+
+
+        if (!faintedUnit.IsPlayerUnit)
+        {
+
+            #region Experience
+            //gain exp
+            int expYield = faintedUnit.Monster.Base.ExpYield;
+
+            int enemyLevel = faintedUnit.Monster.Level;
+
+            float trainerBonus = (isTrainerBattle) ? 1.5f : 1f;
+
+            int expGain = Mathf.FloorToInt((expYield * enemyLevel * trainerBonus) / 7);
+
+            playerUnit.Monster.Exp += expGain;
+
+
+            yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} gained {expGain} experience");
+
+
+            playerUnit.Hud.SetExp();
+
+
+            //check to see if they level up 
+
+            //if the monster is leveling up
+            if (playerUnit.Monster.CheckForLevelUp()) 
+            {
+                playerUnit.Hud.SetLevel();
+                yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} grew to level {playerUnit.Monster.Level}");
+
+                
+
+
+                var newMove = playerUnit.Monster.GetLearnableMoveAtCurrentLevel();
+
+                if(newMove != null)
+                {
+                    if(playerUnit.Monster.Moves.Count < MonsterBase.MaxNumOfMoves)
+                    {
+                        playerUnit.Monster.LearnMove(newMove);
+
+                        yield return dialogBox.TypeDialog($"{playerUnit.Monster.Base.Name} learned {newMove.Base.Name}");
+
+                        dialogBox.SetMoveNames(playerUnit.Monster.Moves);
+
+
+                    }
+                    else
+                    {
+                        //Must teach how to forget move 
+
+                    }
+                }
+
+                yield return playerUnit.Hud.SetExpSmooth();
+
+            }
+            // yield return new WaitForSeconds(1f);
+
+            #endregion
+        }
+
+        CheckForBattleOver(faintedUnit);
+    }
     void CheckForBattleOver(BattleUnit faintedUnit)
     {
         if (faintedUnit.IsPlayerUnit)
