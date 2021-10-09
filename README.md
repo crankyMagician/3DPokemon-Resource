@@ -4,9 +4,9 @@
  ~~~~~~~~~~~TO DO~~~~~~~~~~~~~~~~~~
 
  1) Update UI
-	-Exp does not move 
+	-Exp UI does not move 
 	-Could change health bar to actual slider 
-	-Create pause menu a
+	-Create pause menu 
 	-Create game menu 
 
  2) Create item system
@@ -16,8 +16,14 @@
 
 
  3) Extend delegate battle system to include  items, & trainer battles
+	-Added trainer battles // done
+	-Add levling up //done
+	-Add in nove learning and forgetting // done
+	-Add in evolutions 
 
  4) Create crafting system for items 
+	-
+
 
  5) Integrate enemy state machine with battle system 
 	
@@ -29,6 +35,9 @@ What can be improved:
 	1) exp bar for battle system 
 
 	2) world movement system 
+		-World movement is turned off during battles (done)
+		-Wild encounters need to be turned off after initiated 
+		-trainers need to ignore players if they are in a wild battle
 
 	3) 
 

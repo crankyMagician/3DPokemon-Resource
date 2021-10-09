@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
-
+using System.Linq;
 
 
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
-
-public class PlayerController : MonoBehaviour
+[RequireComponent(typeof(SavableEntity))]
+public class PlayerController : MonoBehaviour, ISavable
 {
 
 
@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("The player's monster party")]
     public MonsterParty playerParty;
+
+
+    [Tooltip("The playe's name ")]
+    [SerializeField]
+    private string playerName;
 
     //[Tooltip("The event that takes place when the player has an encounter")]
    // public Event encounterEvent;
@@ -115,7 +120,11 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        HandleUpdate();
+        if (canMove)
+        {
+            HandleUpdate();
+        }
+       
         //trying to battle
        // CheckIfInTrainersView();
         // CheckForEncounters();
@@ -177,14 +186,20 @@ public class PlayerController : MonoBehaviour
         CheckForEncounters();
     }
     */
-
+    public void CheckForMove(bool ableToMove)
+    {
+        canMove = ableToMove;
+    }
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("EncounterSpace"))
         {
             if (UnityEngine.Random.Range(1, 101) <= 10)
             {
+                
                 OnEncountered();
+
+                CheckForMove(false);
                 if (debugMode)
                 {
                     Debug.Log("Encountered! ");
@@ -212,6 +227,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Trainer"))
         {
             Debug.Log("Triggered a trainer battle! ");
+            CheckForMove(false);
             OnEnterTrainersView?.Invoke(other.gameObject.GetComponent<Collider>());//[hitcol]);
             //var collider = other.gameObject.Ge
         }
@@ -275,5 +291,52 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sphereRadius);
     }
+
+    #region Saving
+    //save
+    public object CaptureState()
+    {
+
+
+        var saveData = new PlayerSaveData()
+        {
+            position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+
+
+            //converts list of monster party data to save data 
+            monsters = GetComponent<MonsterParty>().Monsters.Select(p => p.GetSaveData()).ToList()
+         };
+        //position into float array
+       // float[] position = new float[] { transform.position.x, transform.position.y, transform.position.z };
+
+        return saveData;
+    }
+    //load
+    public void RestoreState(object state)
+    {
+        //state
+        var saveData = (PlayerSaveData)state;
+
+        var pos = saveData.position;
+        transform.position = new Vector3(pos[0],pos[1], pos[2]);
+
+        //restore party 
+
+        GetComponent<MonsterParty>().Monsters = saveData.monsters.Select(s => new Monster(s)).ToList();
+    }
+    #endregion
 }
 
+
+[System.Serializable]
+public class PlayerSaveData
+{
+
+
+    public float[] position;
+
+    public List<MonsterSaveData> monsters;
+
+
+
+}

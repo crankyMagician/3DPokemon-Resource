@@ -174,6 +174,9 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.BattleOver;
         playerParty.Monsters.ForEach(p => p.OnBattleOver());
         OnBattleOver(won);
+
+        //trying to turn overworld walking back on 
+        playerController.CheckForMove(true);
     }
 
     void ActionSelection()
@@ -251,7 +254,7 @@ public class BattleSystem : MonoBehaviour
 
             else if(playerAction == BattleAction.Run)
             {
-                Debug.Log("Failed turn taking place");
+                Debug.Log("Failed run turn taking place");
                 state = BattleState.Busy;
                 yield return FailedToRunFromBattle();
               //  FailedRunFromBattle(enemyUnit, playerUnit, enemyMove);
@@ -547,8 +550,10 @@ public class BattleSystem : MonoBehaviour
             }
             if(nextPokemon == null)
             {
-                Debug.Log("Trainter battle over?");
+                Debug.Log("Trainer battle over?");
                 isTrainerBattle = false;
+                trainerController.BattleLost(true);
+                trainerController.state = NPCState.Interactable;
                 BattleOver(true); ;
             }
 

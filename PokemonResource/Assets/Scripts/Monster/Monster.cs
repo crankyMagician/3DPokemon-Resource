@@ -85,6 +85,63 @@ public class Monster //: MonoBehaviour
         VolatileStatus = null;
     }
 
+    //sertting monster class from save data 
+    public Monster(MonsterSaveData saveData)
+    {
+
+        
+        _base = MonsterDB.GetMonsterByName(saveData.name);
+        HP = saveData.hp;
+
+        level = saveData.level;
+
+        Exp = saveData.exp;
+
+        if(saveData.status != null)
+        {
+            Status = ConditionsDB.Conditions[saveData.status.Value];
+        }
+
+        else
+        {
+            Status = null;
+        }
+
+        // Generate Moves
+
+        Moves = saveData.moves.Select(s => new Move(s)).ToList();
+        
+
+
+
+        CalculateStats();
+
+        StatusChanges = new Queue<string>();
+
+        ResetStatBoost();
+       
+        VolatileStatus = null;
+    }
+
+    //convert current pokemon into save data 
+    public MonsterSaveData GetSaveData()
+    {
+        var saveData = new MonsterSaveData()
+        {
+            //Base = saveData.name;
+            name = Base.Name,
+            hp = HP,
+            level = Level,
+            exp = Exp,
+            status = Status?.Id,
+
+
+            moves = Moves.Select(m => m.GetSaveData()).ToList()
+        };
+
+        return saveData;
+
+    }
     void CalculateStats()
     {
         Stats = new Dictionary<Stat, int>();
@@ -310,4 +367,24 @@ public class DamageDetails
     public bool Fainted { get; set; }
     public float Critical { get; set; }
     public float TypeEffectiveness { get; set; }
+}
+
+
+[System.Serializable]
+public class MonsterSaveData
+{
+
+    public string name;
+    public int hp;
+
+    public int level;
+
+    public int exp;
+
+
+    public ConditionID? status;
+
+    public List<MoveSaveData> moves;
+
+
 }

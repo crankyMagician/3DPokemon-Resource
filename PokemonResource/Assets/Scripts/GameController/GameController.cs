@@ -13,14 +13,31 @@ public class GameController : MonoBehaviour
     [SerializeField]
     Camera worldCamera;
 
+
+    [Header("Saving Values")]
+    [SerializeField]
+    string saveSlot = "saveSlot1";
+
     GameState state;
+
+    GameState stateBeforePause;
 
     //addded
     [SerializeField]
     TrainerController trainerController;
 
+    //for Scene Stuff 
+    public SceneDetails CurrentScene { get; private set; }
+    public SceneDetails PrevScene { get; private set; }
+    public static GameController Instance { get; private set; }
+
+
     private void Awake()
     {
+        MonsterDB.Init();
+
+        MoveDB.Init();
+
         ConditionsDB.Init();
     }
 
@@ -103,5 +120,25 @@ public class GameController : MonoBehaviour
         {
             DialogManager.Instance.HandleUpdate();
         }
+
+
+        //for testing saving and loading 
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            SavingSystem.i.Save(saveSlot);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SavingSystem.i.Load(saveSlot);
+        }
+    }
+
+
+
+    public void SetCurrentScene(SceneDetails currScene)
+    {
+        PrevScene = CurrentScene;
+        CurrentScene = currScene;
     }
 }

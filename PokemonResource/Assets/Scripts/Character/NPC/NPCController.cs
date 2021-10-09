@@ -48,6 +48,11 @@ public class NPCController : MonoBehaviour, Interactable
 
     private void Update()
     {
+        if(state == NPCState.Interactable)
+        {
+
+        }
+        /*
         if (state == NPCState.Idle)
         {
             idleTimer += Time.deltaTime;
@@ -58,12 +63,14 @@ public class NPCController : MonoBehaviour, Interactable
                     StartCoroutine(Walk());
             }
         }
-
+        */
         character.HandleUpdate();
     }
 
+    /*
     IEnumerator Walk()
     {
+        /*
         state = NPCState.Walking;
 
         var oldPos = transform.position;
@@ -72,9 +79,11 @@ public class NPCController : MonoBehaviour, Interactable
 
         if (transform.position != oldPos)
             currentPattern = (currentPattern + 1) % movementPattern.Count;
-
+        
         state = NPCState.Idle;
+        
     }
+    */
 
     /*
     private void OnDrawGizmos()
@@ -89,4 +98,5 @@ public class NPCController : MonoBehaviour, Interactable
     */
 }
 
-public enum NPCState { Idle, Walking, Dialog }
+public enum NPCState { Idle, Walking, Dialog, LookingForBattle, Interactable }
+//public enum NPCState { LookingForBattle, Interactable, NPC };
