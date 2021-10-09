@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2549,11 +2549,11 @@ MonoBehaviour:
   statusText: {fileID: 1127950971}
   hpBar: {fileID: 2131125558}
   expBar: {fileID: 744162821}
-  psnColor: {r: 0.5466852, g: 0.9150943, b: 0.18560876, a: 0}
-  brnColor: {r: 0.8773585, g: 0.07035423, b: 0.07035423, a: 0}
+  psnColor: {r: 0.5466852, g: 0.9150943, b: 0.18560876, a: 1}
+  brnColor: {r: 0.8773585, g: 0.07035423, b: 0.07035423, a: 1}
   slpColor: {r: 0.745283, g: 0.094918124, b: 0.5259771, a: 0}
-  parColor: {r: 0.9339623, g: 0.8470651, b: 0.066082224, a: 0}
-  frzColor: {r: 0.118948035, g: 0.13426507, b: 0.9339623, a: 0}
+  parColor: {r: 0.9339623, g: 0.8470651, b: 0.066082224, a: 1}
+  frzColor: {r: 0.118948035, g: 0.13426507, b: 0.9339623, a: 1}
 --- !u!1 &411631392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2673,7 +2673,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 416438012}
-  m_LocalRotation: {x: 0.12451125, y: -0.000000012804364, z: 0.0000000016067909, w: 0.9922182}
+  m_LocalRotation: {x: 0.12451125, y: 0.000000012804362, z: -0.0000000016067907, w: 0.9922182}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5697,7 +5697,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lettersPerSecond: 30
-  highlightedColor: {r: 0.9716981, g: 0.22581281, b: 0.15033813, a: 0}
+  highlightedColor: {r: 0.9716981, g: 0.22581281, b: 0.15033813, a: 1}
   dialogText: {fileID: 439387676}
   actionSelector: {fileID: 548168873}
   moveSelector: {fileID: 1242922134}
@@ -6357,8 +6357,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.12451124, y: -0.00000001280641, z: 0.0000000016065048, w: 0.9922182}
-  m_LocalPosition: {x: 0, y: 5, z: -17}
+  m_LocalRotation: {x: 0.12451124, y: 0.00000001280641, z: -0.000000001606519, w: 0.9922182}
+  m_LocalPosition: {x: 0, y: 5, z: -10.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -8034,7 +8034,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1259148043}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 6.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 346723852}
@@ -10732,7 +10732,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1563119915}
-  m_LocalRotation: {x: 0.14253858, y: -0.000000008515345, z: 0.0000000012262865, w: 0.98978925}
+  m_LocalRotation: {x: 0.14253858, y: 0.000000008515345, z: -0.0000000012262865, w: 0.98978925}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -12281,7 +12281,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1754289199}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: -17}
+  m_LocalPosition: {x: 0, y: 5, z: -10.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1563119916}
@@ -14039,13 +14039,14 @@ MonoBehaviour:
   enemyUnit: {fileID: 1373875904}
   dialogBox: {fileID: 910557313}
   partyScreen: {fileID: 1836260448}
-  moveSelectionUI: {fileID: 0}
+  moveSelectionUI: {fileID: 2089520529}
   playerController: {fileID: 1259148045}
   trainerController: {fileID: 0}
   catchRate: 2555
   monsterBallObj: {fileID: 1558016901}
   enemyParty: {fileID: 0}
   isTrainerBattle: 0
+  moveToLearn: {fileID: 0}
 --- !u!1 &2029111941
 GameObject:
   m_ObjectHideFlags: 0
@@ -14761,6 +14762,7 @@ GameObject:
   - component: {fileID: 2089520528}
   - component: {fileID: 2089520527}
   - component: {fileID: 2089520526}
+  - component: {fileID: 2089520529}
   m_Layer: 0
   m_Name: MoveSelectUI
   m_TagString: Untagged
@@ -14856,6 +14858,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2089520524}
   m_CullTransparentMesh: 1
+--- !u!114 &2089520529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089520524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f533321f55b7cb4991d493100309290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveTexts:
+  - {fileID: 310603087}
+  - {fileID: 941540236}
+  - {fileID: 36915633}
+  - {fileID: 966408280}
+  - {fileID: 1612081475}
+  highlightColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2096854281
 GameObject:
   m_ObjectHideFlags: 0

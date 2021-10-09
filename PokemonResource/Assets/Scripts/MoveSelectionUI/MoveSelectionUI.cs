@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
+
 public class MoveSelectionUI : MonoBehaviour
 {
 
@@ -9,6 +11,11 @@ public class MoveSelectionUI : MonoBehaviour
 
     List<TMP_Text> moveTexts;
 
+
+    [SerializeField]
+    private Color highlightColor;
+
+    int currentSelection = 0;
     public void SetMoveData(List<MoveBase> currentMoves, MoveBase newMove)
     {
         for (int i = 0; i < currentMoves.Count; i++)
@@ -18,15 +25,45 @@ public class MoveSelectionUI : MonoBehaviour
 
         moveTexts[currentMoves.Count].text = newMove.Name;
     }
-    // Start is called before the first frame update
-    void Start()
+
+
+    //which move to forget? pass an action back to battle system to change state 
+    public void HandleMoveSelection(Action<int> onSelected)
     {
-        
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            ++currentSelection;
+
+        }
+        else if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            --currentSelection;
+        }
+
+        currentSelection = Mathf.Clamp(currentSelection, 0, MonsterBase.MaxNumOfMoves);
+        UpdateMoveSelection(currentSelection);
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            onSelected?.Invoke(currentSelection);
+        }
+
     }
 
-    // Update is called once per frame
-    void Update()
+
+
+    public void UpdateMoveSelection(int selection)
     {
-        
+        for (int i = 0; i < MonsterBase.MaxNumOfMoves+1; i++)
+        {
+            if(i == selection)
+            {
+                moveTexts[i].color = highlightColor;
+            }
+            else
+            {
+                moveTexts[i].color = Color.black;
+            }
+        }
     }
 }
