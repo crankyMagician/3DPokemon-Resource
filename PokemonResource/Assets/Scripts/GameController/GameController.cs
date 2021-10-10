@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-public enum GameState { FreeRoam, Battle, Dialog, Menu, PartyScreen, Cutscene, Paused }
+public enum GameState { FreeRoam, Battle, Dialog, Menu, PartyScreen, Bag, Cutscene, Paused }
 
 public class GameController : MonoBehaviour
 {
@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
     [SerializeField]
     Camera worldCamera;
 
+
+    [SerializeField] InventoryUI inventoryUI;
 
     [Header("Saving Values")]
     [SerializeField]
@@ -205,10 +207,12 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+        playerController.state = state;
+
         if (state == GameState.FreeRoam)
         {
             //wut wut wut 
-            playerController.HandleUpdate();
+            //playerController.HandleUpdate();
 
 
             //p to pull up the menu
@@ -246,7 +250,16 @@ public class GameController : MonoBehaviour
 
             partyScreen.HandleUpdate(onSelected, onBack);
         }
+        else if (state == GameState.Bag)
+        {
+            Action onBack = () =>
+            {
+                inventoryUI.gameObject.SetActive(false);
+                state = GameState.FreeRoam;
+            };
 
+            inventoryUI.HandleUpdate(onBack);
+        }
 
         //for testing saving and loading 
         /*
@@ -280,13 +293,16 @@ public class GameController : MonoBehaviour
 
 
             partyScreen.Init();
-           playerController.GetComponent<MonsterParty>().Monsters = partyScreen.Monsters;
-           // partyScreen.SetPartyData(playerController.GetComponent<MonsterParty>().Monsters);
+           //playerController.GetComponent<MonsterParty>().Monsters = partyScreen.monsters;
+            partyScreen.SetPartyData(playerController.GetComponent<MonsterParty>().Monsters);
             state = GameState.PartyScreen;
         }
         else if (selectedItem == 1)
         {
             // Bag
+            inventoryUI.gameObject.SetActive(true);
+            state = GameState.Bag;
+
         }
         else if (selectedItem == 2)
         {

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ItemSlotUI : MonoBehaviour, ISelectableItem
 {
-    [SerializeField] Text nameText;
-    [SerializeField] Text countText;
+    [SerializeField] TMP_Text nameText;
+    [SerializeField] TMP_Text countText;
 
     RectTransform rectTransform;
     private void Awake()
@@ -14,8 +15,8 @@ public class ItemSlotUI : MonoBehaviour, ISelectableItem
         rectTransform = GetComponent<RectTransform>();
     }
 
-    public Text NameText => nameText;
-    public Text CountText => countText;
+    public TMP_Text NameText => nameText;
+    public TMP_Text CountText => countText;
 
     public float Height => rectTransform.rect.height;
 
@@ -27,6 +28,6 @@ public class ItemSlotUI : MonoBehaviour, ISelectableItem
 
     public void OnSelectionChanged(bool selected)
     {
-       // nameText.color = selected ? GlobalSettings.i.HighlightedColor : Color.black;
+       nameText.color = selected ? GlobalSettings.i.HighlightedColor : Color.black;
     }
 }

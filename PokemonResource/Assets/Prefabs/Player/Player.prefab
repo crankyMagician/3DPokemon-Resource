@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8839517227389551012}
   - component: {fileID: 8839517227389551013}
   - component: {fileID: 1219653969202895444}
+  - component: {fileID: 7235370360984564488}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -87,7 +88,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugMode: 1
+  state: 0
   playerParty: {fileID: 8839517227389551013}
+  playerName: 
   moveSpeed: 6
   camTransform: {fileID: 0}
   encounterSpace:
@@ -145,6 +148,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueId: 
+--- !u!114 &7235370360984564488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8839517227389551039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2426c3354a8ea8f4e8cd800cb5d7ad58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slots: []
 --- !u!1 &8839517228711519118
 GameObject:
   m_ObjectHideFlags: 0

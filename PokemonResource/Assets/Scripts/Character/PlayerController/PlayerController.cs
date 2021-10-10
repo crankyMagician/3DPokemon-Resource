@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour, ISavable
     public bool debugMode;
 
 
+    //[SerializeField]
+    public GameState state;
+
     [Tooltip("The player's monster party")]
     public MonsterParty playerParty;
 
@@ -42,7 +45,7 @@ public class PlayerController : MonoBehaviour, ISavable
 
     [Header("Values")]
 
-    [Tooltip("The player's movement Speed")]
+    [Tooltip("The player's movement speed")]
 
     [SerializeField]
 
@@ -120,6 +123,16 @@ public class PlayerController : MonoBehaviour, ISavable
     }
     private void Update()
     {
+        if (state != GameState.FreeRoam)
+        {
+            canMove = false;
+           // HandleUpdate();
+        } 
+        else if (state == GameState.FreeRoam)
+        {
+            canMove = true;
+           // HandleUpdate();
+        }
         if (canMove)
         {
             HandleUpdate();
