@@ -14,6 +14,10 @@ public class PartyScreen : SelectionUI<PartyMemberUI>
 
     MonsterParty party;
 
+
+    public Monster SelectedMember => Monsters[selection];
+
+    public BattleState? CalledFrom { get; set; }
     public void Init()
     {
         memberSlots = GetComponentsInChildren<PartyMemberUI>(true);
@@ -25,6 +29,36 @@ public class PartyScreen : SelectionUI<PartyMemberUI>
 
         SetPartyData();
     }
+
+    int selection = 0;
+    public void HandleUpdate(Action onSelected, Action onBack)
+    {
+        var prevSelection = selection;
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            ++selection;
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            --selection;
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+            selection += 2;
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+            selection -= 2;
+
+        selection = Mathf.Clamp(selection, 0, Monsters.Count - 1);
+
+        if (selection != prevSelection)
+            UpdateMemberSelection(selection);
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            onSelected?.Invoke();
+        }
+        else if (Input.GetKeyDown(KeyCode.X))
+        {
+            onBack?.Invoke();
+        }
+    }
+
 
     public void SetPartyData()
     {
@@ -66,6 +100,9 @@ public class PartyScreen : SelectionUI<PartyMemberUI>
                 memberSlots[i].SetSelected(false);
         }
     }
+
+
+
 
     /*
 

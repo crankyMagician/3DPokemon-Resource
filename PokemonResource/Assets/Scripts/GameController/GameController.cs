@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-public enum GameState { FreeRoam, Battle, Dialog, Menu, Cutscene, Paused }
+public enum GameState { FreeRoam, Battle, Dialog, Menu, PartyScreen, Cutscene, Paused }
 
 public class GameController : MonoBehaviour
 {
@@ -231,6 +231,22 @@ public class GameController : MonoBehaviour
             menuController.HandleUpdate();
         }
 
+        else if (state == GameState.PartyScreen)
+        {
+            Action onSelected = () =>
+            {
+                // TODO: Go to Summary Screen
+            };
+
+            Action onBack = () =>
+            {
+                partyScreen.gameObject.SetActive(false);
+                state = GameState.FreeRoam;
+            };
+
+            partyScreen.HandleUpdate(onSelected, onBack);
+        }
+
 
         //for testing saving and loading 
         /*
@@ -260,6 +276,13 @@ public class GameController : MonoBehaviour
         if (selectedItem == 0)
         {
             // Pokemon
+            partyScreen.gameObject.SetActive(true);
+
+
+            partyScreen.Init();
+           playerController.GetComponent<MonsterParty>().Monsters = partyScreen.Monsters;
+           // partyScreen.SetPartyData(playerController.GetComponent<MonsterParty>().Monsters);
+            state = GameState.PartyScreen;
         }
         else if (selectedItem == 1)
         {
