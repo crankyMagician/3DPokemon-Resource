@@ -9,7 +9,7 @@ public class PartyMemberUI : MonoBehaviour, ISelectableItem
     [SerializeField] TMP_Text levelText;
     [SerializeField] HPBar hpBar;
 
-    [SerializeField] Color highlightedColor;
+  //  [SerializeField] Color highlightedColor;
 
     Monster _monster;
 
@@ -52,7 +52,7 @@ public class PartyMemberUI : MonoBehaviour, ISelectableItem
     public void SetSelected(bool selected)
     {
         if (selected)
-            nameText.color = highlightedColor;
+            nameText.color = GlobalSettings.i.HighlightedColor;
         else
             nameText.color = Color.black;
     }

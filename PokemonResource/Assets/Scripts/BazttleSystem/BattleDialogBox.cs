@@ -38,6 +38,12 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] 
     TMP_Text typeText;
 
+
+
+    [SerializeField] GameObject choiceBox;
+    [SerializeField] Text yesText;
+    [SerializeField] Text noText;
+
     public void SetDialog(string dialog)
     {
         dialogText.text = dialog;
@@ -56,6 +62,29 @@ public class BattleDialogBox : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
     }
+
+
+
+    public void EnableChoiceBox(bool enabled)
+    {
+        choiceBox.SetActive(enabled);
+    }
+
+    public void UpdateChoiceBox(bool yesSelected)
+    {
+        if (yesSelected)
+        {
+            yesText.color = highlightedColor;
+            noText.color = Color.black;
+        }
+        else
+        {
+            yesText.color = Color.black;
+            noText.color = highlightedColor;
+        }
+    }
+
+
     //enabling the dialog text 
     public void EnableDialogText(bool enabled)
     {
